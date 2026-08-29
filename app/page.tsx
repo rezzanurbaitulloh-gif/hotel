@@ -76,7 +76,7 @@ export default function Home(){
             </p>
           </div>
 
-          {/* Right: Layered Asymmetrical Images — Fixed Stacking Context */}
+          {/* Right: Layered Asymmetrical Images — Fixed Layout */}
           <div className="relative mt-10 lg:mt-0 lg:ml-auto lg:w-[58%] isolate">
             {/* Main Large Image - Base Layer */}
             <div className="relative aspect-[4/5] w-full overflow-hidden">
