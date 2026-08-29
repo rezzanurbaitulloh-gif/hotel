@@ -1,10 +1,10 @@
 "use client";
 import { createClient } from "@/lib/supabase/client";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n/provider";
-export default function LoginPage(){
+function LoginInner(){
   const { t } = useI18n();
   const supabase = createClient();
   const router = useRouter();
@@ -44,4 +44,7 @@ export default function LoginPage(){
       <div className="mt-4 text-xs text-[var(--muted)]">Google OAuth requires enabling Google provider in Supabase Auth dashboard and adding authorized redirect: {typeof window!=="undefined"? window.location.origin+"/auth/callback" : "/auth/callback"}</div>
     </div>
   );
+}
+export default function LoginPage(){
+  return <Suspense fallback={<div className="mx-auto max-w-md px-6 py-12">Loading…</div>}><LoginInner /></Suspense>;
 }

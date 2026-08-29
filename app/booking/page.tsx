@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { stays } from "@/lib/data";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -12,7 +12,7 @@ const ADDONS: Addon[]=[
   { key:"romance", label:"Romance setup — flowers & dinner styling", price:120 },
   { key:"extrabed", label:"Extra bed", price:60 },
 ];
-export default function Booking(){
+function BookingInner(){
   const { t } = useI18n();
   const router=useRouter();
   const searchParams=useSearchParams();
@@ -237,4 +237,7 @@ export default function Booking(){
       )}
     </div>
   );
+}
+export default function Booking(){
+  return <Suspense fallback={<div className="mx-auto max-w-6xl px-6 py-12">Loading…</div>}><BookingInner /></Suspense>;
 }
