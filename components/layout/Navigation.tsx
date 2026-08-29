@@ -7,13 +7,12 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { createClient } from "@/lib/supabase/client";
 
 const links = [
-  { href:"/stay", label:"Stay" },
-  { href:"/experiences", label:"Experiences" },
-  { href:"/dining", label:"Dining" },
+  { href:"/rooms", label:"Rooms" },
   { href:"/offers", label:"Offers" },
+  { href:"/experiences", label:"Experiences" },
+  { href:"/about", label:"About" },
   { href:"/gallery", label:"Gallery" },
-  { href:"/story", label:"Story" },
-  { href:"/location", label:"Location" },
+  { href:"/contact", label:"Contact" },
 ];
 
 export default function Navigation(){
@@ -46,7 +45,7 @@ export default function Navigation(){
           </Link>
           <nav className="hidden lg:flex items-center gap-7 text-[13px] tracking-[0.08em]">
             {links.map(l=>(
-              <Link key={l.href} href={l.href} className={`hover:opacity-60 transition-opacity ${pathname===l.href?"underline underline-offset-8 decoration-[var(--accent)]":""}`}>{l.label}</Link>
+              <Link key={l.href} href={l.href} className={`hover:opacity-60 transition-opacity ${(pathname===l.href || (l.href==="/rooms" && pathname.startsWith("/stay")) || (l.href==="/about" && pathname.startsWith("/story")))?"underline underline-offset-8 decoration-[var(--accent)]":""}`}>{l.label}</Link>
             ))}
           </nav>
           <div className="flex items-center gap-2">
