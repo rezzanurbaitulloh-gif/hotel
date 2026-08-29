@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useI18n } from "@/lib/i18n/provider";
 import { stays as fallbackStays, experiences as fallbackExps, offers as fallbackOffers, dining as fallbackDining } from "@/lib/data";
@@ -20,7 +21,15 @@ export default function Home(){
       {/* HERO — Cinematic Full Viewport */}
       <section className="relative h-[100vh] min-h-[600px] overflow-hidden bg-[var(--obsidian)] -mt-[72px] pt-[72px]">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80" alt="AURA" className="w-full h-full object-cover" style={{transform:`scale(${1 + scrollY*0.00015}) translateY(${scrollY*0.12}px)`}} />
+          <Image
+            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80"
+            alt="AURA Grand Luxury Resort"
+            fill
+            className="object-cover"
+            priority
+            style={{transform:`scale(${1 + scrollY*0.00015}) translateY(${scrollY*0.12}px)`}}
+            sizes="100vw"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent h-32" />
         </div>
@@ -53,22 +62,66 @@ export default function Home(){
         </div>
       </section>
 
-      {/* EDITORIAL INTRO — WOW #2 */}
+      {/* EDITORIAL INTRO — WOW #2: Rich, Layered, Asymmetrical */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-8 py-16 lg:py-24">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-start">
-          <div>
+        <div className="relative">
+          {/* Left: Editorial Typography */}
+          <div className="lg:w-1/2 lg:pr-12">
             <h2 className="display text-[42px] lg:text-[64px] leading-[0.85]">
               A PLACE<br/>DESIGNED<br/>TO BE<br/><span className="italic font-light">REMEMBERED.</span>
             </h2>
             <div className="mt-6 w-12 h-[1px] bg-[var(--gold)]"></div>
-            <p className="mt-6 text-sm leading-7 text-[var(--stone)] font-light max-w-md">AURA sits on limestone 80m above the Indian Ocean. Marble, stone, wood and brass — architectural lines that frame horizon, quiet and lingering light. Each pavilion placed for privacy, linked by frangipani paths.</p>
+            <p className="mt-6 text-sm leading-7 text-[var(--stone)] font-light max-w-md">
+              AURA sits on limestone 80m above the Indian Ocean. Marble, stone, wood and brass — architectural lines that frame horizon, quiet and lingering light. Each pavilion placed for privacy, linked by frangipani paths.
+            </p>
           </div>
-          <div className="relative">
-            <div className="overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b597?w=800&q=80" alt="Architecture" className="w-full aspect-[4/5] object-cover hover:scale-[1.02] transition duration-1000" />
+
+          {/* Right: Layered Asymmetrical Images — Overlapping Editorial Style */}
+          <div className="relative mt-10 lg:mt-0 lg:ml-auto lg:w-[58%]">
+            {/* Main Large Image */}
+            <div className="relative overflow-hidden rounded-none">
+              <Image
+                src="https://images.unsplash.com/photo-1571003123894-1f0594d2b597?w=1200&q=80"
+                alt="AURA Architecture - Cliffside Pavilion"
+                fill
+                className="object-cover hover:scale-[1.02] transition-all duration-1000"
+                priority
+                sizes="(max-width: 1024px) 100vw, 58vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </div>
-            <div className="absolute -bottom-8 -left-8 w-48 h-32 overflow-hidden border-4 border-[var(--ivory)] shadow-xl hidden lg:block">
-              <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80" alt="Detail" className="w-full h-full object-cover" />
+
+            {/* Overlapping Detail Image - Bottom Left */}
+            <div className="absolute -bottom-10 -left-6 w-[45%] h-40 lg:w-[50%] lg:h-48 overflow-hidden border-4 border-[var(--ivory)] shadow-2xl shadow-black/20">
+              <Image
+                src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
+                alt="Pool Detail"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 45vw"
+              />
+            </div>
+
+            {/* Third Accent Image - Top Right */}
+            <div className="absolute -top-6 -right-6 w-36 h-24 lg:w-40 lg:h-28 overflow-hidden border-2 border-[var(--gold)]/30">
+              <Image
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"
+                alt="Suite Detail"
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
+            </div>
+
+            {/* Architectural Detail Strip - Bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-r from-transparent via-[var(--gold)]/10 to-transparent border-t border-[var(--gold)]/20 flex items-center justify-center px-8">
+              <div className="flex items-center gap-4 text-xs tracking-[0.18em] text-[var(--gold)] font-light">
+                <span>MARBLE</span><span className="w-px h-4 bg-[var(--gold)]/30"></span>
+                <span>TEAK</span><span className="w-px h-4 bg-[var(--gold)]/30"></span>
+                <span>BRASS</span><span className="w-px h-4 bg-[var(--gold)]/30"></span>
+                <span>STONE</span><span className="w-px h-4 bg-[var(--gold)]/30"></span>
+                <span>LINEN</span>
+              </div>
             </div>
           </div>
         </div>
@@ -98,7 +151,15 @@ export default function Home(){
               </div>
             </div>
             <div className="overflow-hidden bg-black">
-              <img key={activeExp} src={exps[activeExp].img} alt={exps[activeExp].title} className="w-full aspect-[16/10] lg:aspect-[16/9] object-cover transition duration-700" />
+              <Image
+                key={activeExp}
+                src={exps[activeExp].img}
+                alt={exps[activeExp].title}
+                fill
+                className="object-cover transition duration-700"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
             </div>
           </div>
         </div>
@@ -115,7 +176,13 @@ export default function Home(){
           {fallbackStays.slice(0,6).map((s:any)=>(
             <Link key={s.slug} href={`/stay/${s.slug}`} className="group">
               <div className="overflow-hidden bg-[var(--stone)]/20">
-                <img src={s.image} alt={s.name} className="w-full aspect-[4/5] object-cover group-hover:scale-[1.03] transition duration-700" />
+                <Image
+                  src={s.image}
+                  alt={s.name}
+                  fill
+                  className="object-cover group-hover:scale-[1.03] transition duration-700"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
               </div>
               <div className="pt-4">
                 <div className="text-[11px] tracking-[0.14em] text-[var(--gold)]">{s.category} • {s.size}</div>
@@ -133,7 +200,13 @@ export default function Home(){
 
       {/* DINING — Dramatic */}
       <section className="relative h-[70vh] min-h-[500px] overflow-hidden bg-black">
-        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80" alt="Dining" className="absolute inset-0 w-full h-full object-cover" />
+        <Image
+          src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80"
+          alt="Dining at SERA"
+          fill
+          className="absolute inset-0 w-full h-full object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative mx-auto max-w-[1440px] px-6 lg:px-8 h-full flex flex-col justify-center">
           <div className="max-w-xl text-white">
@@ -159,14 +232,26 @@ export default function Home(){
             </div>
           </div>
           <div className="overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" alt="Spa" className="w-full aspect-[4/3] object-cover" />
+            <Image
+              src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1200&q=80"
+              alt="Spa"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
           </div>
         </div>
       </section>
 
       {/* BEYOND THE RESORT */}
       <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1920&q=80" alt="Beyond" className="w-full h-full object-cover" />
+        <Image
+          src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1920&q=80"
+          alt="Beyond the Resort"
+          fill
+          className="absolute inset-0 w-full h-full object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
           <h2 className="display text-[36px] lg:text-[56px]">BEYOND<br/>THE RESORT</h2>
@@ -175,7 +260,7 @@ export default function Home(){
         </div>
       </section>
 
-      {/* GALLERY — Horizontal */}
+      {/* GALLERY — Horizontal Scroll */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-8 py-12">
         <div className="flex justify-between items-end">
           <h2 className="display text-[28px]">GALLERY</h2>
@@ -188,7 +273,16 @@ export default function Home(){
             "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80",
             "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=600&q=80",
             "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80",
-          ].map((src,i)=> <img key={i} src={src} alt="gallery" className="w-72 h-48 object-cover flex-shrink-0 hover:scale-[1.02] transition" />)}
+          ].map((src,i)=> (
+            <Image
+              key={i}
+              src={src}
+              alt="Gallery"
+              width={288}
+              height={192}
+              className="flex-shrink-0 object-cover hover:scale-[1.02] transition"
+            />
+          ))}
         </div>
       </section>
 
