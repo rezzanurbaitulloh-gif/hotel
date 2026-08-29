@@ -31,41 +31,50 @@ export default async function StayDetail({ params }:{ params: Promise<{slug:stri
   if(!s) s=fallback.find(x=>x.slug===slug);
   if(!s) return notFound();
   return (
-    <div>
-      <section className="relative h-[62vh] min-h-[420px] overflow-hidden bg-black">
+    <div className="bg-[var(--ivory)]">
+      <section className="relative h-[85vh] min-h-[500px] overflow-hidden bg-black">
         <img src={s.image} alt={s.name} className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="relative mx-auto max-w-[1440px] px-6 lg:px-8 h-full flex flex-col justify-end pb-8 text-white">
-          <div className="eyebrow text-white/70">{s.category} • {s.size} • {s.view}</div>
-          <h1 className="display text-[40px] lg:text-[56px] mt-2">{s.name}</h1>
-          <div className="text-white/80 text-sm mt-2">For {s.capacity} • {s.bed} • From ${s.price}/night • Live from Supabase</div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="relative mx-auto max-w-[1440px] px-6 lg:px-8 h-full flex flex-col justify-end pb-12 text-white">
+          <div className="eyebrow text-[var(--champagne)]">{s.category} • {s.view}</div>
+          <h1 className="display text-[48px] lg:text-[72px] mt-2 leading-[0.85]">{s.name.toUpperCase()}</h1>
+          <div className="mt-4 flex flex-wrap gap-4 text-[11px] tracking-[0.16em] font-light">
+            <span>{s.size}</span><span className="w-px h-3 bg-white/20"></span><span>{s.capacity} GUESTS</span><span className="w-px h-3 bg-white/20"></span><span>PRIVATE POOL</span><span className="w-px h-3 bg-white/20"></span><span>From ${s.price} / night</span>
+          </div>
         </div>
       </section>
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-8 py-8 grid lg:grid-cols-[1.1fr_0.7fr] gap-8">
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-8 py-8">
+        <div className="flex gap-2 overflow-auto pb-2">
+          {s.images.map((src:string,i:number)=> <img key={i} src={src} alt={s.name} className="w-[320px] h-[220px] object-cover flex-shrink-0" />)}
+          <div className="w-[320px] h-[220px] border border-dashed border-[var(--line)] grid place-items-center text-xs text-muted-foreground flex-shrink-0">Floorplan — available on request</div>
+        </div>
+      </section>
+      <section className="mx-auto max-w-[1440px] px-6 lg:px-8 grid lg:grid-cols-[1.7fr_0.9fr] gap-8 pb-12">
         <div>
-          <p className="text-[15px] leading-7 text-[var(--muted)]">{s.description}</p>
-          <div className="mt-6 grid grid-cols-3 gap-4 text-sm">
-            <div className="border border-[var(--line)] p-4 bg-white"><div className="eyebrow text-[10px]">Size</div><div className="font-medium mt-1">{s.size}</div></div>
-            <div className="border border-[var(--line)] p-4 bg-white"><div className="eyebrow text-[10px]">Bed</div><div className="font-medium mt-1">{s.bed}</div></div>
-            <div className="border border-[var(--line)] p-4 bg-white"><div className="eyebrow text-[10px]">View</div><div className="font-medium mt-1">{s.view}</div></div>
-          </div>
-          <div className="mt-8 grid sm:grid-cols-2 gap-3">
-            {s.images.map((src:string,i:number)=><img key={i} src={src} alt={s.name} className="w-full aspect-[4/3] object-cover" loading="lazy" />)}
-          </div>
+          <p className="text-[15px] leading-7 text-[var(--stone)] font-light">{s.description} — Grand Luxury hospitality, layered materials, cinematic light.</p>
           <div className="mt-8">
-            <h3 className="font-medium">Amenities (real)</h3>
-            <ul className="mt-3 grid grid-cols-2 gap-2 text-sm text-[var(--muted)]">
-              {s.amenities.map((a:string)=><li key={a} className="flex gap-2"><span className="text-[var(--accent)]">•</span>{a}</li>)}
-            </ul>
+            <h3 className="text-xs tracking-[0.16em] text-[var(--gold)]">LUXURY AMENITIES</h3>
+            <div className="mt-3 flex gap-3 overflow-auto pb-2">
+              {s.amenities.map((a:string)=> <span key={a} className="px-4 py-2 border border-[var(--line)] bg-white text-xs whitespace-nowrap">{a.toUpperCase()}</span>)}
+            </div>
+            <div className="mt-2 overflow-hidden whitespace-nowrap border-y border-[var(--line)] py-2">
+              <div className="animate-marquee flex gap-8 text-xs tracking-[0.16em] text-[var(--stone)]">
+                <span>PRIVATE POOL</span><span>•</span><span>24-HOUR BUTLER</span><span>•</span><span>OCEAN VIEW</span><span>•</span><span>PRIVATE DINING</span><span>•</span><span>PERSONAL CONCIERGE</span><span>•</span><span>AIRPORT TRANSFER</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 grid sm:grid-cols-2 gap-6">
+            <div><h4 className="text-xs tracking-[0.16em]">Included</h4><ul className="mt-2 text-sm font-light space-y-1">{s.included.map((i:string)=><li key={i}>— {i}</li>)}</ul></div>
+            <div><h4 className="text-xs tracking-[0.16em]">Policies</h4><p className="mt-2 text-sm font-light text-[var(--stone)]">{s.policy}</p></div>
           </div>
         </div>
         <div className="lg:sticky lg:top-[88px] h-fit border border-[var(--line)] bg-white p-6">
-          <div className="text-sm text-[var(--muted)]">From</div>
-          <div className="text-[28px] font-medium">${s.price} <span className="text-sm text-[var(--muted)] font-normal">/ night</span></div>
-          <Link href={`/booking?stay=${s.slug}`} className="mt-4 h-11 w-full inline-flex items-center justify-center rounded-full bg-[var(--ink)] text-white text-xs tracking-[0.14em] font-semibold">CHECK AVAILABILITY</Link>
-          <div className="mt-6 text-xs text-[var(--muted)]">Pricing validated server-side. Live inventory.</div>
+          <div className="text-xs tracking-[0.16em] text-[var(--gold)]">YOUR STAY</div>
+          <div className="text-2xl font-light mt-2">${s.price} <span className="text-sm text-[var(--stone)] font-light">/ night</span></div>
+          <Link href={`/booking?stay=${s.slug}`} className="mt-4 h-11 w-full inline-flex items-center justify-center bg-[var(--obsidian)] text-white text-xs tracking-[0.16em] font-light">RESERVE — CHECK AVAILABILITY</Link>
+          <div className="mt-4 text-xs text-[var(--stone)] font-light">Live inventory — pricing validated server-side</div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
