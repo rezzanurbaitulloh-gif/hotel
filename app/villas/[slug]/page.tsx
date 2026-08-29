@@ -1,1 +1,1 @@
-import { redirect } from 'next/navigation'; export default function VillasSlug({params}:{params:{slug:string}}){ redirect(`/stay/${params.slug}`); }
+import { redirect } from 'next/navigation'; export default async function VillasSlug({params}:{params: Promise<{slug:string}>}){ const { slug } = await params; redirect(`/stay/${slug}`); }

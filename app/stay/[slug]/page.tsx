@@ -2,13 +2,16 @@ import { stays } from "@/lib/data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 export async function generateStaticParams(){ return stays.map(s=>({slug:s.slug})); }
-export function generateMetadata({ params }:{ params:{slug:string}}){
-  const s=stays.find(x=>x.slug===params.slug);
+export async function generateMetadata({ params }:{ params: Promise<{slug:string}> }){
+  const { slug } = await params;
+  const s=stays.find(x=>x.slug===slug);
   return { title: s? `${s.name} — Stay` : "Stay" };
 }
-export default function StayDetail({ params }:{ params:{slug:string}}){
-  const s=stays.find(x=>x.slug===params.slug);
+export default async function StayDetail({ params }:{ params: Promise<{slug:string}> }){
+  const { slug } = await params;
+  const s=stays.find(x=>x.slug===slug);
   if(!s) return notFound();
+
   return (
     <div>
       <section className="relative h-[62vh] min-h-[420px] overflow-hidden bg-black">

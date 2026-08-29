@@ -2,9 +2,11 @@ import { offers } from "@/lib/data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 export async function generateStaticParams(){ return offers.map(o=>({slug:o.slug})); }
-export default function OfferDetail({ params }:{ params:{slug:string}}){
-  const o=offers.find(x=>x.slug===params.slug);
+export default async function OfferDetail({ params }:{ params: Promise<{slug:string}> }){
+  const { slug } = await params;
+  const o=offers.find(x=>x.slug===slug);
   if(!o) return notFound();
+
   if(!o.active) return <div className="mx-auto max-w-[1440px] px-6 lg:px-8 py-12"><div className="border border-amber-200 bg-amber-50 p-6">This offer has expired.</div></div>;
   return (
     <div className="mx-auto max-w-[1440px] px-6 lg:px-8 py-8 grid lg:grid-cols-2 gap-8">

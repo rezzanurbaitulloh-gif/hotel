@@ -2,9 +2,11 @@ import { experiences } from "@/lib/data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 export async function generateStaticParams(){ return experiences.map(e=>({slug:e.slug})); }
-export default function ExpDetail({ params }:{ params:{slug:string}}){
-  const e=experiences.find(x=>x.slug===params.slug);
+export default async function ExpDetail({ params }:{ params: Promise<{slug:string}> }){
+  const { slug } = await params;
+  const e=experiences.find(x=>x.slug===slug);
   if(!e) return notFound();
+
   return (
     <div className="mx-auto max-w-[1440px] px-6 lg:px-8 py-8 grid lg:grid-cols-2 gap-8">
       <img src={e.image} alt={e.title} className="w-full aspect-[4/3] object-cover" />
