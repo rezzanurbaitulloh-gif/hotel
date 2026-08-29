@@ -107,7 +107,7 @@ export default function Dashboard(){
           <Table>
             <TableHeader><TableRow><TableHead>Guest</TableHead><TableHead>ID</TableHead><TableHead>Room</TableHead><TableHead>Check-in</TableHead><TableHead>Guests</TableHead><TableHead>Amount</TableHead><TableHead>Status</TableHead></TableRow></TableHeader>
             <TableBody>
-              {bookings.slice(0,5).map((b:any)=>(
+              {bookings.slice(0,10).map((b:any)=>(
                 <TableRow key={b.id}>
                   <TableCell>{b.guest_name}</TableCell><TableCell className="font-mono text-xs">{b.id.slice(0,8)}</TableCell><TableCell>{b.stay_slug}</TableCell><TableCell>{b.check_in}</TableCell><TableCell>{b.adults+b.children}</TableCell><TableCell>${b.total}</TableCell><TableCell><Badge variant={b.status==="confirmed"?"success":b.status==="pending"?"warning":"secondary"}>{b.status}</Badge></TableCell>
                 </TableRow>

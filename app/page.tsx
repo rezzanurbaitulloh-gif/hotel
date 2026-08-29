@@ -112,7 +112,7 @@ export default function Home(){
           <div className="mt-4 w-12 h-[1px] bg-[var(--gold)] mx-auto"></div>
         </div>
         <div className="mt-10 grid md:grid-cols-3 gap-6">
-          {fallbackStays.slice(0,3).map((s:any)=>(
+          {fallbackStays.slice(0,6).map((s:any)=>(
             <Link key={s.slug} href={`/stay/${s.slug}`} className="group">
               <div className="overflow-hidden bg-[var(--stone)]/20">
                 <img src={s.image} alt={s.name} className="w-full aspect-[4/5] object-cover group-hover:scale-[1.03] transition duration-700" />
