@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Concierge from "@/components/layout/Concierge";
+import ChatWidget from "@/components/ai/ChatWidget";
 
 const display = Cormorant_Garamond({ subsets:["latin"], variable:"--font-display", weight:["300","400","500","600"] });
 const body = Inter({ subsets:["latin"], variable:"--font-body" });
@@ -25,6 +26,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }){
         <main id="main" className="flex-1">{children}</main>
         <Footer />
         <Concierge />
+        <ChatWidget />
+        <script src="https://app.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}></script>
       </body>
     </html>
   );

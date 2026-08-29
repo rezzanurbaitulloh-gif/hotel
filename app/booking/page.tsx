@@ -21,6 +21,7 @@ export default function Booking(){
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState("");
   const [success,setSuccess]=useState(false);
+  const [midtransUrl,setMidtransUrl]=useState<string | null>(null);
 
   const stay = stays.find(s=>s.slug===staySlug)!;
   const nights = useMemo(()=>{
@@ -48,17 +49,48 @@ export default function Booking(){
     setTimeout(()=>{ setLoading(false); setStep(2); }, 700);
   };
 
-  const handleConfirm=()=>{
+  const handleConfirm=async()=>{
     if(!guest.name || !guest.email){ setError("Name and email required."); return; }
     if(!/^[^@]+@[^@]+\.[^@]+$/.test(guest.email)){ setError("Invalid email."); return; }
     const e=validateDates(); if(e){ setError(e); setStep(1); return; }
-    // server-side validation simulation
     setError(""); setLoading(true);
-    setTimeout(()=>{
+    try{
+      const res = await fetch("/api/bookings/create",{method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({
+        stay_slug: stay.slug,
+        check_in: checkIn,
+        check_out: checkOut,
+        adults, children,
+        guest_name: guest.name,
+        guest_email: guest.email,
+        guest_phone: guest.phone,
+        special_request: guest.request,
+        addons: selectedAddons,
+        addons_total: addonsTotal,
+        total
+      })});
+      const data=await res.json();
+      if(!res.ok) throw new Error(data.error||"Booking failed");
+      // try midtrans
+      let midtrans:any=null;
+      try{
+        const mres=await fetch("/api/midtrans/create",{method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({
+          order_id: data.booking.id,
+          amount: total,
+          stay: stay.name,
+          check_in: checkIn, check_out: checkOut, guest
+        })});
+        midtrans=await mres.json();
+        if(midtrans.redirect_url){ setMidtransUrl(midtrans.redirect_url);
+
+        }
+      }catch{}
       setLoading(false);
       setSuccess(true);
       setStep(3);
-    }, 900);
+
+    }catch(err:any){
+      setLoading(false); setError(err.message);
+    }
   };
 
   if(success){
@@ -73,9 +105,12 @@ export default function Booking(){
           <div className="text-[var(--muted)]">Total validated server-side: ${total} ({nights} × ${stay.price} + addons ${addonsTotal})</div>
           {guest.request && <div className="mt-2">Request: {guest.request}</div>}
         </div>
-        <div className="mt-6 flex justify-center gap-3">
-          <Link href="/" className="h-10 px-5 inline-flex items-center rounded-full border border-[var(--line)] text-xs">BACK HOME</Link>
-          <a href="https://wa.me/6281234567890" className="h-10 px-5 inline-flex items-center rounded-full bg-[var(--ink)] text-white text-xs">CHAT CONCIERGE</a>
+        <div className="mt-6 flex flex-col items-center gap-3">
+          {midtransUrl ? <a href={midtransUrl} target="_blank" className="h-11 px-7 inline-flex items-center rounded-full bg-[#C9A96E] text-white text-xs tracking-wide font-semibold">PAY WITH MIDTRANS — Snap</a> : <div className="text-xs text-[var(--muted)]">Midtrans payment link will appear here when gateway is live. Concierge will send secure link via WhatsApp.</div>}
+          <div className="flex gap-3">
+            <Link href="/" className="h-10 px-5 inline-flex items-center rounded-full border border-[var(--line)] text-xs">BACK HOME</Link>
+            <a href="https://wa.me/6281234567890" className="h-10 px-5 inline-flex items-center rounded-full bg-[var(--ink)] text-white text-xs">CHAT CONCIERGE</a>
+          </div>
         </div>
       </div>
     );
