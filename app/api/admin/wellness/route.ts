@@ -4,9 +4,9 @@ export const runtime="nodejs";
 
 export async function GET(){
   const supabase=createServiceClient();
-  const { data, error }=await supabase.from("experiences").select("*").order("order_index");
+  const { data, error }=await supabase.from("wellness_services").select("*").order("sort_order");
   if(error) return Response.json({error:error.message},{status:500});
-  return Response.json({experiences:data});
+  return Response.json({services:data});
 }
 
 export async function POST(req:Request){
@@ -14,9 +14,9 @@ export async function POST(req:Request){
   if(!auth.data.user) return Response.json({error:"Unauthorized"},{status:401});
   const body=await req.json();
   const supabase=createServiceClient();
-  const { data, error }=await supabase.from("experiences").insert(body).select().single();
+  const { data, error }=await supabase.from("wellness_services").insert(body).select().single();
   if(error) return Response.json({error:error.message},{status:400});
-  return Response.json({experience:data});
+  return Response.json({service:data});
 }
 
 export async function PUT(req:Request){
@@ -26,9 +26,9 @@ export async function PUT(req:Request){
   const { id, ...rest }=body;
   if(!id) return Response.json({error:"Missing id"},{status:400});
   const supabase=createServiceClient();
-  const { data, error }=await supabase.from("experiences").update(rest).eq("id",id).select().single();
+  const { data, error }=await supabase.from("wellness_services").update(rest).eq("id",id).select().single();
   if(error) return Response.json({error:error.message},{status:400});
-  return Response.json({experience:data});
+  return Response.json({service:data});
 }
 
 export async function DELETE(req:Request){
@@ -38,7 +38,7 @@ export async function DELETE(req:Request){
   const id=searchParams.get("id");
   if(!id) return Response.json({error:"Missing id"},{status:400});
   const supabase=createServiceClient();
-  const { error }=await supabase.from("experiences").delete().eq("id",id);
+  const { error }=await supabase.from("wellness_services").delete().eq("id",id);
   if(error) return Response.json({error:error.message},{status:400});
   return Response.json({ok:true});
 }

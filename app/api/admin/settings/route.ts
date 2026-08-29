@@ -4,9 +4,9 @@ export const runtime="nodejs";
 
 export async function GET(){
   const supabase=createServiceClient();
-  const { data, error }=await supabase.from("experiences").select("*").order("order_index");
+  const { data, error }=await supabase.from("hotel_settings").select("*");
   if(error) return Response.json({error:error.message},{status:500});
-  return Response.json({experiences:data});
+  return Response.json({settings:data});
 }
 
 export async function POST(req:Request){
@@ -14,31 +14,31 @@ export async function POST(req:Request){
   if(!auth.data.user) return Response.json({error:"Unauthorized"},{status:401});
   const body=await req.json();
   const supabase=createServiceClient();
-  const { data, error }=await supabase.from("experiences").insert(body).select().single();
+  const { data, error }=await supabase.from("hotel_settings").upsert(body).select().single();
   if(error) return Response.json({error:error.message},{status:400});
-  return Response.json({experience:data});
+  return Response.json({setting:data});
 }
 
 export async function PUT(req:Request){
   const auth=await (await createClient()).auth.getUser();
   if(!auth.data.user) return Response.json({error:"Unauthorized"},{status:401});
   const body=await req.json();
-  const { id, ...rest }=body;
-  if(!id) return Response.json({error:"Missing id"},{status:400});
+  const { key, ...rest }=body;
+  if(!key) return Response.json({error:"Missing key"},{status:400});
   const supabase=createServiceClient();
-  const { data, error }=await supabase.from("experiences").update(rest).eq("id",id).select().single();
+  const { data, error }=await supabase.from("hotel_settings").upsert({key,...rest}).select().single();
   if(error) return Response.json({error:error.message},{status:400});
-  return Response.json({experience:data});
+  return Response.json({setting:data});
 }
 
 export async function DELETE(req:Request){
   const auth=await (await createClient()).auth.getUser();
   if(!auth.data.user) return Response.json({error:"Unauthorized"},{status:401});
   const { searchParams }=new URL(req.url);
-  const id=searchParams.get("id");
-  if(!id) return Response.json({error:"Missing id"},{status:400});
+  const key=searchParams.get("key");
+  if(!key) return Response.json({error:"Missing key"},{status:400});
   const supabase=createServiceClient();
-  const { error }=await supabase.from("experiences").delete().eq("id",id);
+  const { error }=await supabase.from("hotel_settings").delete().eq("key",key);
   if(error) return Response.json({error:error.message},{status:400});
   return Response.json({ok:true});
 }
