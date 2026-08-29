@@ -1,0 +1,1 @@
+import { redirect } from 'next/navigation'; export default function VillasSlug({params}:{params:{slug:string}}){ redirect(`/stay/${params.slug}`); }

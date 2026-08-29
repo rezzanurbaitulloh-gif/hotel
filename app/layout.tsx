@@ -5,6 +5,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import Concierge from "@/components/layout/Concierge";
 import ChatWidget from "@/components/ai/ChatWidget";
+import { I18nProvider } from "@/lib/i18n/provider";
 
 const display = Cormorant_Garamond({ subsets:["latin"], variable:"--font-display", weight:["300","400","500","600"] });
 const body = Inter({ subsets:["latin"], variable:"--font-body" });
@@ -21,12 +22,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }){
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
+        <I18nProvider>
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-2 focus:rounded">Skip to content</a>
         <Navigation />
         <main id="main" className="flex-1">{children}</main>
         <Footer />
         <Concierge />
         <ChatWidget />
+        </I18nProvider>
         <script src="https://app.midtrans.com/snap/snap.js" data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}></script>
       </body>
     </html>

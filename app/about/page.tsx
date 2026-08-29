@@ -1,0 +1,1 @@
+import Story from '../story/page'; export default Story; export const metadata={title:'About — AURA'};
