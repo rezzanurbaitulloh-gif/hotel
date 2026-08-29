@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
@@ -7,20 +7,21 @@ import Concierge from "@/components/layout/Concierge";
 import ChatWidget from "@/components/ai/ChatWidget";
 import { I18nProvider } from "@/lib/i18n/provider";
 
-const display = Cormorant_Garamond({ subsets:["latin"], variable:"--font-display", weight:["300","400","500","600"] });
+const display = Cormorant_Garamond({ subsets:["latin"], variable:"--font-display", weight:["300","400","500","600","700"] });
+const display2 = Playfair_Display({ subsets:["latin"], variable:"--font-display2", weight:["400","500"] });
 const body = Inter({ subsets:["latin"], variable:"--font-body" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hotel.example.com"),
-  title:{ default:"AURA — Private Escape, Surrounded by Nature", template:"%s — AURA" },
-  description:"A cinematic hospitality hideaway on the Balinese cliff — villas, suites, dining and private experiences. Direct booking.",
-  openGraph:{ title:"AURA — Private Escape", description:"Ocean villas, jungle suites and cliff residences. Direct booking, curated experiences.", type:"website", images:["https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80"] },
+  title:{ default:"AURA — A World Beyond Ordinary", template:"%s — AURA" },
+  description:"Grand Luxury Hospitality — cinematic villas, private residences, culinary journeys and immersive experiences on the Balinese cliff. Direct booking.",
+  openGraph:{ title:"AURA — A World Beyond Ordinary", description:"Grand Luxury resort — villas, residences, dining, wellness. Direct booking.", type:"website", images:["https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1920&q=80"] },
   twitter:{ card:"summary_large_image" }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }){
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" className={`${display.variable} ${display2.variable} ${body.variable}`}>
       <body className="min-h-screen flex flex-col antialiased">
         <I18nProvider>
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-2 focus:rounded">Skip to content</a>
