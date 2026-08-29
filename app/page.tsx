@@ -62,11 +62,11 @@ export default function Home(){
         </div>
       </section>
 
-      {/* EDITORIAL INTRO — WOW #2: Rich, Layered, Asymmetrical */}
+      {/* EDITORIAL INTRO — WOW #2: Fixed Layout with Proper Stacking Context */}
       <section className="mx-auto max-w-[1440px] px-6 lg:px-8 py-16 lg:py-24">
-        <div className="relative">
+        <div className="relative isolate">
           {/* Left: Editorial Typography */}
-          <div className="lg:w-1/2 lg:pr-12">
+          <div className="lg:w-1/2 lg:pr-12 z-10">
             <h2 className="display text-[42px] lg:text-[64px] leading-[0.85]">
               A PLACE<br/>DESIGNED<br/>TO BE<br/><span className="italic font-light">REMEMBERED.</span>
             </h2>
@@ -76,10 +76,10 @@ export default function Home(){
             </p>
           </div>
 
-          {/* Right: Layered Asymmetrical Images — Overlapping Editorial Style */}
-          <div className="relative mt-10 lg:mt-0 lg:ml-auto lg:w-[58%]">
-            {/* Main Large Image */}
-            <div className="relative overflow-hidden rounded-none">
+          {/* Right: Layered Asymmetrical Images — Fixed Stacking Context */}
+          <div className="relative mt-10 lg:mt-0 lg:ml-auto lg:w-[58%] isolate">
+            {/* Main Large Image - Base Layer */}
+            <div className="relative aspect-[4/5] w-full overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1571003123894-1f0594d2b597?w=1200&q=80"
                 alt="AURA Architecture - Cliffside Pavilion"
@@ -91,19 +91,19 @@ export default function Home(){
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </div>
 
-            {/* Overlapping Detail Image - Bottom Left */}
-            <div className="absolute -bottom-10 -left-6 w-[45%] h-40 lg:w-[50%] lg:h-48 overflow-hidden border-4 border-[var(--ivory)] shadow-2xl shadow-black/20">
+            {/* Overlapping Detail Image - Bottom Left - Fixed Positioning */}
+            <div className="absolute bottom-0 left-0 w-[48%] h-[45%] lg:w-[52%] lg:h-[50%] -ml-6 -mb-6 overflow-hidden border-4 border-[var(--ivory)] shadow-2xl shadow-black/20 z-10">
               <Image
                 src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80"
                 alt="Pool Detail"
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 45vw"
+                sizes="(max-width: 1024px) 100vw, 48vw"
               />
             </div>
 
             {/* Third Accent Image - Top Right */}
-            <div className="absolute -top-6 -right-6 w-36 h-24 lg:w-40 lg:h-28 overflow-hidden border-2 border-[var(--gold)]/30">
+            <div className="absolute top-0 right-0 w-36 h-24 lg:w-40 lg:h-28 overflow-hidden border-2 border-[var(--gold)]/30 z-10">
               <Image
                 src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"
                 alt="Suite Detail"
@@ -114,7 +114,7 @@ export default function Home(){
             </div>
 
             {/* Architectural Detail Strip - Bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-r from-transparent via-[var(--gold)]/10 to-transparent border-t border-[var(--gold)]/20 flex items-center justify-center px-8">
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-r from-transparent via-[var(--gold)]/10 to-transparent border-t border-[var(--gold)]/20 flex items-center justify-center px-8 z-20">
               <div className="flex items-center gap-4 text-xs tracking-[0.18em] text-[var(--gold)] font-light">
                 <span>MARBLE</span><span className="w-px h-4 bg-[var(--gold)]/30"></span>
                 <span>TEAK</span><span className="w-px h-4 bg-[var(--gold)]/30"></span>
@@ -280,7 +280,7 @@ export default function Home(){
               alt="Gallery"
               width={288}
               height={192}
-              className="flex-shrink-0 object-cover hover:scale-[1.02] transition"
+              className="w-72 h-48 object-cover flex-shrink-0 hover:scale-[1.02] transition"
             />
           ))}
         </div>
