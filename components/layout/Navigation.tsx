@@ -23,8 +23,10 @@ export default function Navigation(){
   const supabase=createClient();
   const router=useRouter();
   const [user,setUser]=useState<any>(null);
+  const [openProfile,setOpenProfile]=useState(false);
   useEffect(()=>{ supabase.auth.getUser().then(({data})=> setUser(data.user)); const {data: sub}=supabase.auth.onAuthStateChange((_e,s)=> setUser(s?.user||null)); return()=> sub.subscription.unsubscribe(); },[]);
   const isHome=pathname==="/";
+  useEffect(()=>{ const h=(e:MouseEvent)=>{ const el=document.getElementById("profile-dropdown"); if(el && !el.contains(e.target as Node)) setOpenProfile(false); }; if(openProfile) document.addEventListener("click", h); return()=> document.removeEventListener("click", h); },[openProfile]);
   useEffect(()=>{
     const onScroll=()=>setScrolled(window.scrollY>16);
     onScroll(); window.addEventListener("scroll",onScroll); return()=>window.removeEventListener("scroll",onScroll);
@@ -51,7 +53,31 @@ export default function Navigation(){
           <div className="flex items-center gap-2">
             <div className="hidden sm:block"><LanguageSwitcher /></div>
             {user ? (
-              <Link href="/admin" className={`hidden sm:inline-flex h-9 px-4 items-center text-xs rounded-full border ${light?"border-white/30 text-white":"border-[var(--line)]"}`}>{user.email?.split("@")[0]}</Link>
+              <div className="hidden sm:block relative">
+                <button onClick={()=> setOpenProfile(!openProfile)} className={`h-9 px-3 flex items-center gap-2 rounded-full border text-xs ${light?"border-white/30 text-white":"border-[var(--line)] bg-white"}`}>
+                  <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center text-[10px] overflow-hidden">
+                    {user.user_metadata?.avatar_url ? <img src={user.user_metadata.avatar_url} alt="avatar" className="w-full h-full object-cover" /> : (user.user_metadata?.name?.[0] || user.email?.[0]?.toUpperCase())}
+                  </span>
+                  <span className="max-w-[100px] truncate">{user.user_metadata?.name || user.email?.split("@")[0]}</span>
+                  <span className="text-[10px]">▾</span>
+                </button>
+                {openProfile && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white border rounded-lg shadow-lg overflow-hidden z-50">
+                    <div className="p-3 border-b bg-secondary/50">
+                      <div className="text-sm font-medium truncate">{user.user_metadata?.name || "Guest"}</div>
+                      <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+                    </div>
+                    <div className="py-1">
+                      <Link href="/profile" onClick={()=>setOpenProfile(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted">◎ Profile</Link>
+                      <Link href="/profile?tab=settings" onClick={()=>setOpenProfile(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted">⚙ Pengaturan Akun</Link>
+                      <Link href="/my-reservations" onClick={()=>setOpenProfile(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted">▭ Pesanan Saya</Link>
+                      <Link href="/dashboard" onClick={()=>setOpenProfile(false)} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-muted">◈ Dashboard</Link>
+                      <div className="border-t my-1"></div>
+                      <button onClick={async()=>{ await supabase.auth.signOut(); setOpenProfile(false); router.refresh(); }} className="w-full text-left px-3 py-2 text-sm hover:bg-muted text-red-600">Logout</button>
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link href="/auth/login" className={`hidden sm:inline-flex h-9 px-4 items-center text-xs rounded-full border ${light?"border-white/30 text-white":"border-[var(--line)]"}`}>Login</Link>
@@ -81,7 +107,7 @@ export default function Navigation(){
             <Link href="/contact" className="flex justify-between items-center py-4 border-b border-[var(--line)] text-[22px] font-light"><span className="display">Contact</span></Link>
             <Link href="/faq" className="flex justify-between items-center py-4 border-b border-[var(--line)] text-[22px] font-light"><span className="display">FAQ</span></Link>
             <div className="pt-4 space-y-2">
-              {user ? <><div className="text-sm">Hi, {user.email}</div><button onClick={async()=>{await supabase.auth.signOut(); router.refresh(); setOpen(false);}} className="w-full h-10 rounded-full border">Sign out</button><Link href="/admin" className="w-full h-10 rounded-full bg-[var(--ink)] text-white grid place-items-center text-sm" onClick={()=>setOpen(false)}>Dashboard</Link></> : <><Link href="/auth/login" className="w-full h-10 rounded-full border grid place-items-center" onClick={()=>setOpen(false)}>Login</Link><Link href="/register" className="w-full h-10 rounded-full bg-[var(--ink)] text-white grid place-items-center" onClick={()=>setOpen(false)}>Register</Link></>}
+              {user ? <><div className="flex items-center gap-2 mb-3"><span className="w-8 h-8 rounded-full bg-primary text-primary-foreground grid place-items-center text-xs overflow-hidden">{user.user_metadata?.avatar_url ? <img src={user.user_metadata.avatar_url} alt="avatar" className="w-full h-full object-cover" /> : user.email[0].toUpperCase()}</span><div><div className="text-sm font-medium">{user.user_metadata?.name || user.email.split("@")[0]}</div><div className="text-xs text-muted-foreground">{user.email}</div></div></div><Link href="/profile" onClick={()=>setOpen(false)} className="w-full h-10 rounded-full border grid place-items-center text-sm">◎ Profile</Link><Link href="/profile?tab=settings" onClick={()=>setOpen(false)} className="w-full h-10 rounded-full border grid place-items-center text-sm">⚙ Pengaturan</Link><Link href="/my-reservations" onClick={()=>setOpen(false)} className="w-full h-10 rounded-full border grid place-items-center text-sm">▭ Pesanan Saya</Link><Link href="/dashboard" onClick={()=>setOpen(false)} className="w-full h-10 rounded-full bg-secondary grid place-items-center text-sm">Dashboard</Link><button onClick={async()=>{await supabase.auth.signOut(); router.refresh(); setOpen(false);}} className="w-full h-10 rounded-full border text-red-600">Logout</button></> : <><Link href="/auth/login" className="w-full h-10 rounded-full border grid place-items-center" onClick={()=>setOpen(false)}>Login</Link><Link href="/register" className="w-full h-10 rounded-full bg-[var(--ink)] text-white grid place-items-center" onClick={()=>setOpen(false)}>Register</Link></>}
             </div>
           </nav>
           <div className="p-6 border-t border-[var(--line)] space-y-3">
